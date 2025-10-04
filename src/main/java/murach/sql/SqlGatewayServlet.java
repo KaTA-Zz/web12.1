@@ -29,13 +29,13 @@ public class SqlGatewayServlet extends HttpServlet {
             // get a connection to Aiven MySQL using environment variables
             String dbURL = System.getenv("DATABASE_URL") != null 
                 ? System.getenv("DATABASE_URL")
-                : "jdbc:mysql://mysql-3a297a68-chap12-1.i.aivencloud.com:27412/defaultdb?ssl-mode=REQUIRED&serverTimezone=UTC";
+                : "jdbc:mysql://avnadmin:AVNS_At6r_5nNybatPjxENZ7@khang-d7cf041-khangtvhuy-5374.e.aivencloud.com:18191/murach?ssl-mode=REQUIRED";
             String username = System.getenv("DATABASE_USERNAME") != null 
                 ? System.getenv("DATABASE_USERNAME") 
                 : "avnadmin";
             String password = System.getenv("DATABASE_PASSWORD") != null 
                 ? System.getenv("DATABASE_PASSWORD") 
-                : "fallback-password-not-real";
+                : "AVNS_At6r_5nNybatPjxENZ7";
             Connection connection = DriverManager.getConnection(
                     dbURL, username, password);
             
@@ -87,11 +87,11 @@ public class SqlGatewayServlet extends HttpServlet {
         session.setAttribute("sqlStatement", sqlStatement);
         
         // Create HTML response directly
-        response.setContentType("text/html");
-        response.setCharacterEncoding("UTF-8");
-        
-        String htmlResponse = generateHtmlResponse(sqlStatement, sqlResult);
-        response.getWriter().write(htmlResponse);
+        request.setAttribute("sqlResult", sqlResult);
+        request.setAttribute("sqlStatement", sqlStatement);
+
+        String url = "/index.jsp";
+        getServletContext().getRequestDispatcher(url).forward(request, response);
     }
     
     private String generateHtmlResponse(String sqlStatement, String sqlResult) {
